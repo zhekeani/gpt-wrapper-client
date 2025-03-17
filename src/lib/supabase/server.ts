@@ -7,22 +7,20 @@ export const getSupabaseCookiesUtilClient = async () => {
   const cookieStore = await cookies();
   const { url, anonKey } = getSupabaseConfig();
 
-  if (url && anonKey) {
-    return createServerClient<Database>(url, anonKey, {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch (error) {
-            console.error("Failed to set cookies", error);
-          }
-        },
+  return createServerClient<Database>(url, anonKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
       },
-    });
-  }
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options);
+          });
+        } catch (error) {
+          console.error("Failed to set cookies", error);
+        }
+      },
+    },
+  });
 };

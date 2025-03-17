@@ -14,26 +14,24 @@ export const getSupabaseReqResClient = ({
 
   const { url, anonKey } = getSupabaseConfig();
 
-  if (url && anonKey) {
-    const supabase = createServerClient<Database>(url, anonKey, {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => {
-            request.cookies.set(name, value);
-          });
-          response.value = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) => {
-            response.value.cookies.set(name, value, options);
-          });
-        },
+  const supabase = createServerClient<Database>(url, anonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
       },
-    });
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value);
+        });
+        response.value = NextResponse.next({
+          request,
+        });
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.value.cookies.set(name, value, options);
+        });
+      },
+    },
+  });
 
-    return { supabase, response };
-  }
+  return { supabase, response };
 };

@@ -5,7 +5,5 @@ import { getSupabaseConfig } from "./config";
 export const getSupabaseBrowserClient = () => {
   const { url, anonKey } = getSupabaseConfig();
 
-  if (url && anonKey) {
-    return createBrowserClient<Database>(url, anonKey);
-  }
+  return createBrowserClient<Database>(url, anonKey);
 };
