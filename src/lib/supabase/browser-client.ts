@@ -3,7 +3,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import { getSupabaseConfig } from "./config";
 
 export const getSupabaseBrowserClient = () => {
-  const { url, anonKey } = getSupabaseConfig();
+  const { url, anonKey } = getSupabaseConfig("client");
 
   return createBrowserClient<Database>(url, anonKey);
 };

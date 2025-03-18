@@ -54,6 +54,10 @@ interface GptWrapperContext {
   setUseRetrieval: Dispatch<SetStateAction<boolean>>;
   sourceCount: number;
   setSourceCount: Dispatch<SetStateAction<number>>;
+
+  // SIDEBAR
+  showSidebar: boolean;
+  toggleSidebar: () => void;
 }
 
 export const GptWrapperContext = createContext<GptWrapperContext>({
@@ -108,4 +112,8 @@ export const GptWrapperContext = createContext<GptWrapperContext>({
   setUseRetrieval: () => {},
   sourceCount: 4,
   setSourceCount: () => {},
+
+  // SIDEBAR
+  showSidebar: false,
+  toggleSidebar: () => {},
 });

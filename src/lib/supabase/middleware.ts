@@ -12,7 +12,7 @@ export const getSupabaseReqResClient = ({
     value: NextResponse.next({ request: request }),
   };
 
-  const { url, anonKey } = getSupabaseConfig();
+  const { url, anonKey } = getSupabaseConfig("server");
 
   const supabase = createServerClient<Database>(url, anonKey, {
     cookies: {

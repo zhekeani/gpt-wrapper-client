@@ -1,4 +1,4 @@
-export const getSupabaseConfig = () => {
+export const getSupabaseConfig = (env: "server" | "client" = "server") => {
   const isLocal = process.env.NEXT_PUBLIC_SUPABASE_ENV === "local";
 
   const requiredEnvVars = {
@@ -14,11 +14,14 @@ export const getSupabaseConfig = () => {
   };
 
   const missingVars = Object.entries(requiredEnvVars)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .filter(([_, value]) => !value)
+    .filter(
+      ([key, value]) =>
+        !value && !(env === "client" && key === "serviceRoleKey")
+    )
     .map(([key]) => key);
 
   if (missingVars.length > 0) {
+    console.log(missingVars);
     throw new Error(
       `❌ Missing required Supabase environment variables: ${missingVars.join(
         ", "
@@ -29,6 +32,6 @@ export const getSupabaseConfig = () => {
   return requiredEnvVars as {
     url: string;
     anonKey: string;
-    serviceRoleKey: string;
+    serviceRoleKey?: string;
   };
 };

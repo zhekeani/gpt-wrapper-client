@@ -1,7 +1,6 @@
 "use client";
 
 import { GptWrapperContext } from "@/context/context";
-import { getProfileByUserId } from "@/db/profile";
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { ChatSettings } from "@/types/chat";
@@ -10,6 +9,7 @@ import { OpenRouterLLM } from "@/types/llms";
 import { Tables } from "@/types/supabase.types";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
+import { getProfileByUserIdOnClient } from "../../lib/db/profile";
 
 interface GlobalStateProps {
   children: ReactNode;
@@ -43,8 +43,6 @@ export const GlobalState = ({ children }: GlobalStateProps) => {
     temperature: 0.5,
     contextLength: 4000,
     includeProfileContext: true,
-    includeWorkspaceInstructions: true,
-    embeddingsProvider: "openai",
   });
   const [selectedChat, setSelectedChat] = useState<Tables<"chats"> | null>(
     null
@@ -65,6 +63,17 @@ export const GlobalState = ({ children }: GlobalStateProps) => {
   const [useRetrieval, setUseRetrieval] = useState<boolean>(true);
   const [sourceCount, setSourceCount] = useState<number>(4);
 
+  // SIDEBAR
+  const [showSidebar, setShowSidebar] = useState<boolean>(
+    // localStorage.getItem("showSidebar") === "true"
+    true
+  );
+
+  const handleToggleSidebar = () => {
+    setShowSidebar((prevState) => !prevState);
+    localStorage.setItem("showSidebar", String(!showSidebar));
+  };
+
   useEffect(() => {
     (async () => {
       const profile = await fetchStartingData();
@@ -84,10 +93,10 @@ export const GlobalState = ({ children }: GlobalStateProps) => {
     if (session) {
       const user = session.user;
 
-      const profile = await getProfileByUserId(user.id);
+      const profile = await getProfileByUserIdOnClient(user.id);
       setProfile(profile);
 
-      if (!profile.has_onboarded) {
+      if (user.confirmed_at && !profile.has_onboarded) {
         return router.push("/setup");
       }
 
@@ -147,6 +156,10 @@ export const GlobalState = ({ children }: GlobalStateProps) => {
         setUseRetrieval,
         sourceCount,
         setSourceCount,
+
+        // SIDEBAR
+        showSidebar,
+        toggleSidebar: handleToggleSidebar,
       }}
     >
       {children}

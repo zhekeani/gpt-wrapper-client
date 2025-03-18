@@ -8,8 +8,6 @@ export interface ChatSettings {
   temperature: number;
   contextLength: number;
   includeProfileContext: boolean;
-  includeWorkspaceInstructions: boolean;
-  embeddingsProvider: "openai" | "local";
 }
 
 export interface ChatPayload {

@@ -3,7 +3,7 @@ import { getSupabaseConfig } from "./config";
 import { Database } from "@/types/supabase.types";
 
 export const getSupabaseAdminClient = () => {
-  const { url, serviceRoleKey } = getSupabaseConfig();
+  const { url, serviceRoleKey } = getSupabaseConfig("server");
 
-  return createClient<Database>(url, serviceRoleKey);
+  return createClient<Database>(url, serviceRoleKey!);
 };
