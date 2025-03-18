@@ -1,5 +1,6 @@
 "use client";
 
+import Dashboard from "@/components/ui/dashboard";
 import { GptWrapperContext } from "@/context/context";
 import { getChatsByUserIdOnClient } from "@/lib/db/chats";
 import { getPresetsByUserIdOnClient } from "@/lib/db/presets";
@@ -7,7 +8,6 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { LLMID } from "@/types/llms";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useContext, useEffect, useRef, useState } from "react";
-import Dashboard from "../../../components/ui/dashboard";
 import Loading from "../loading";
 
 const ChatLayout = ({ children }: { children: ReactNode }) => {

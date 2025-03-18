@@ -1,7 +1,7 @@
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { EmailOtpType, GenerateLinkParams } from "@supabase/supabase-js";
 import { NextRequest } from "next/server";
 import { ReactNode } from "react";
-import { getSupabaseAdminClient } from "../supabase/admin";
 import { buildUrl } from "./build-url";
 import { contentMap } from "./data/magic-lin-contents";
 import MagicLinkTemplate from "./email-template/MagicLinkTemplate";

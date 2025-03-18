@@ -1,4 +1,4 @@
-import { LLMID } from "../types/llms";
+import { LLMID } from "@/types/llms";
 
 type ChatSettingLimits = {
   MIN_TEMPERATURE: number;

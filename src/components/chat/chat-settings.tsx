@@ -1,11 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { GptWrapperContext } from "@/context/context";
+import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits";
 import { SlidersHorizontal } from "lucide-react";
 import { useContext, useEffect } from "react";
-import { GptWrapperContext } from "../../context/context";
-import { CHAT_SETTING_LIMITS } from "../../lib/chat-setting-limits";
-import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import ChatSettingsForm from "./chat-settings-form";
 
 const ChatSettings = () => {

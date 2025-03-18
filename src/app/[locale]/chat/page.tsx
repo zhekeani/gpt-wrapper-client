@@ -1,9 +1,9 @@
 "use client";
 
+import ChatSettings from "@/components/chat/chat-settings";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { GptWrapperContext } from "@/context/context";
 import { useContext } from "react";
-import ChatSettings from "../../../components/chat/chat-settings";
-import { SidebarTrigger } from "../../../components/ui/sidebar";
-import { GptWrapperContext } from "../../../context/context";
 
 const ChatPage = () => {
   const { showSidebar } = useContext(GptWrapperContext);

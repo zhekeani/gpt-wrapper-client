@@ -1,12 +1,12 @@
-import { Search, SquarePen } from "lucide-react";
-import { ComponentProps } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarTrigger,
-} from "../ui/sidebar";
+} from "@/components/ui/sidebar";
+import { Search, SquarePen } from "lucide-react";
+import { ComponentProps } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ChatSideBarProps extends ComponentProps<typeof Sidebar> {}

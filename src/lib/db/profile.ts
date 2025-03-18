@@ -1,5 +1,5 @@
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { TablesInsert, TablesUpdate } from "@/types/supabase.types";
-import { getSupabaseBrowserClient } from "../supabase/browser-client";
 
 const supabase = getSupabaseBrowserClient();
 

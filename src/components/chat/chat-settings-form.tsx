@@ -8,10 +8,10 @@ import { TextareaAutosize } from "@/components/ui/textarea-autosize";
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
 import { GptWrapperContext } from "@/context/context";
 import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits";
+import { cn } from "@/lib/utils";
 import { ChatSettings } from "@/types/chat";
 import { AlertCircle, Info } from "lucide-react";
 import { useContext } from "react";
-import { cn } from "../../lib/utils";
 import { AdvancedSettings } from "./advanced-settings";
 
 interface ChatSettingsFormProps {

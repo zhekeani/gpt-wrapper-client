@@ -1,6 +1,7 @@
 "use client";
 
 import { GptWrapperContext } from "@/context/context";
+import { getProfileByUserIdOnClient } from "@/lib/db/profile";
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { ChatSettings } from "@/types/chat";
@@ -9,7 +10,6 @@ import { OpenRouterLLM } from "@/types/llms";
 import { Tables } from "@/types/supabase.types";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
-import { getProfileByUserIdOnClient } from "../../lib/db/profile";
 
 interface GlobalStateProps {
   children: ReactNode;

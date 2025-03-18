@@ -1,5 +1,5 @@
+import { LLM } from "@/types/llms";
 import { Sparkles } from "lucide-react";
-import { LLM } from "../../types/llms";
 
 interface ModelOptionProps {
   model: LLM;
