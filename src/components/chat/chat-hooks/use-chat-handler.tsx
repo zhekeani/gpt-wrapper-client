@@ -11,7 +11,7 @@ import {
   handleCreateMessages,
   handleHostedChat,
   validateChatSettings,
-} from "../chat-helpers";
+} from "../../../app/[locale]/chat/../../../components/chat/chat-helpers";
 
 export const useChatHandler = () => {
   const router = useRouter();
@@ -76,6 +76,7 @@ export const useChatHandler = () => {
 
       validateChatSettings(chatSettings, modelData, profile, messageContent);
 
+      const isNewChat = !!!selectedChat;
       let currentChat = selectedChat ? { ...selectedChat } : null;
 
       const { tempAssistantChatMessage, tempUserChatMessage } =
@@ -114,7 +115,6 @@ export const useChatHandler = () => {
           setSelectedChat,
           setChats
         );
-        // router.replace(`/chat/${currentChat.id}`);
       } else {
         const updatedChat = await updateChatOnClient(currentChat.id, {
           updated_at: new Date().toISOString(),
@@ -142,6 +142,10 @@ export const useChatHandler = () => {
 
       setIsGenerating(false);
       setFirstTokenReceived(false);
+
+      if (isNewChat) {
+        router.replace(`/chat/${currentChat.id}`);
+      }
     } catch (error) {
       console.error(error);
       setIsGenerating(false);

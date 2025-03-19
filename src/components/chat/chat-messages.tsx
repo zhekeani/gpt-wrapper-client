@@ -1,4 +1,4 @@
-import { useChatHandler } from "@/app/[locale]/chat/chat-hooks/use-chat-handler";
+import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import Message from "@/components/message/message";
 import { GptWrapperContext } from "@/context/context";
 import { Tables } from "@/types/supabase.types";

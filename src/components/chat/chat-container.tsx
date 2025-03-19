@@ -1,5 +1,5 @@
-import { useChatHandler } from "@/app/[locale]/chat/chat-hooks/use-chat-handler";
-import { useChatScroll } from "@/app/[locale]/chat/chat-hooks/use-chat-scroll";
+import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
+import { useChatScroll } from "@/components/chat/chat-hooks/use-chat-scroll";
 import Loading from "@/app/[locale]/loading";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { GptWrapperContext } from "@/context/context";
@@ -7,7 +7,7 @@ import { getChatByIdOnClient } from "@/lib/db/chats";
 import { getMessagesByChatIdOnClient } from "@/lib/db/messages";
 import { cn } from "@/lib/utils";
 import { LLMID } from "@/types/llms";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import ChatInfo from "./chat-info";
 import ChatInput from "./chat-input";
@@ -19,6 +19,7 @@ const ChatContainer = () => {
   const [loading, setLoading] = useState(true);
   const isInitialLoad = useRef<boolean>(true);
   const params = useParams() as { chatId: string | null };
+  const searchParams = useSearchParams();
 
   const {
     setChatMessages,
@@ -69,12 +70,9 @@ const ChatContainer = () => {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (params.chatId) {
-        await Promise.all([
-          fetchMessages(params.chatId),
-          fetchChat(params.chatId),
-        ]);
+    const fetchData = async (chatId: string | null) => {
+      if (chatId) {
+        await Promise.all([fetchMessages(chatId), fetchChat(chatId)]);
 
         scrollToBottom();
         setIsAtBottom(true);
@@ -87,7 +85,8 @@ const ChatContainer = () => {
     };
 
     if (isInitialLoad.current) {
-      fetchData();
+      const chatId = params.chatId || searchParams.get("chatId") || null;
+      fetchData(chatId);
       isInitialLoad.current = false;
     }
   }, [
@@ -96,6 +95,7 @@ const ChatContainer = () => {
     handleFocusChatInput,
     params.chatId,
     scrollToBottom,
+    searchParams,
     setIsAtBottom,
   ]);
 

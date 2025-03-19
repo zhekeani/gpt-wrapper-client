@@ -1,4 +1,4 @@
-import { useChatHandler } from "@/app/[locale]/chat/chat-hooks/use-chat-handler";
+import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
 import { MessageSquarePlus } from "lucide-react";
 import { Button } from "../ui/button";

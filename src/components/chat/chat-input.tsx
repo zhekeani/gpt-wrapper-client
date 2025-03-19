@@ -1,4 +1,4 @@
-import { useChatHandler } from "@/app/[locale]/chat/chat-hooks/use-chat-handler";
+import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { TextareaAutosize } from "@/components/ui/textarea-autosize";
 import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
