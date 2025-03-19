@@ -76,7 +76,9 @@ export const createTempMessages = (
   let newMessages: ChatMessage[] = [];
 
   if (isRegeneration) {
-    // TODO HANDLE IF REGENERATION
+    const lastMessageIndex = chatMessages.length - 1;
+    chatMessages[lastMessageIndex].message.content = "";
+    newMessages = [...chatMessages];
   } else {
     newMessages = [
       ...chatMessages,
@@ -267,7 +269,18 @@ export const handleCreateMessages = async (
   let finalChatMessages: ChatMessage[] = [];
 
   if (isRegeneration) {
-    // TODO HANDLE REGENERATION
+    const lastStartingMessage = chatMessages[chatMessages.length - 1].message;
+
+    const updatedMessage = await updateMessageOnClient(lastStartingMessage.id, {
+      ...lastStartingMessage,
+      content: generatedText,
+    });
+
+    chatMessages[chatMessages.length - 1].message = updatedMessage;
+
+    finalChatMessages = [...chatMessages];
+
+    setChatMessages(finalChatMessages);
   } else {
     const createdMessages = await createMessagesOnClient([
       finalUserMessage,

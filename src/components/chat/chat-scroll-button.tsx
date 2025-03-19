@@ -1,4 +1,4 @@
-import { CircleChevronDown } from "lucide-react";
+import { CircleArrowDown } from "lucide-react";
 
 interface ChatScrollButtonProps {
   isAtTop: boolean;
@@ -16,9 +16,9 @@ const ChatScrollBtn = ({
   return (
     <>
       {!isAtBottom && isOverflowing && (
-        <CircleChevronDown
+        <CircleArrowDown
           className="cursor-pointer opacity-50 hover:opacity-100 size-8"
-          strokeWidth={2}
+          strokeWidth={1.5}
           onClick={scrollToBottom}
         />
       )}

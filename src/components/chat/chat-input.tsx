@@ -23,7 +23,7 @@ const ChatInput = () => {
     }
   };
 
-  console.log(chatMessages);
+  // console.log(chatMessages);
 
   return (
     <div className="border-input relative mt-3 flex min-h-[60px] w-full items-center justify-center rounded-xl border-2">

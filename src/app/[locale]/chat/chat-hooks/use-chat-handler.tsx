@@ -1,7 +1,9 @@
 import { GptWrapperContext } from "@/context/context";
 import { updateChatOnClient } from "@/lib/db/chats";
+import { deleteMessagesIncludingAndAfterOnClient } from "@/lib/db/messages";
 import { ChatPayload } from "@/types/chat";
 import { ChatMessage } from "@/types/chat-message";
+import { useRouter } from "next/navigation";
 import { useContext, useRef } from "react";
 import {
   createTempMessages,
@@ -10,7 +12,6 @@ import {
   handleHostedChat,
   validateChatSettings,
 } from "../chat-helpers";
-import { useRouter } from "next/navigation";
 
 export const useChatHandler = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ export const useChatHandler = () => {
     setFirstTokenReceived,
     selectedChat,
     setChats,
+    chatMessages,
     availableOpenRouterModels,
     setAbortController,
     abortController,
@@ -148,11 +150,33 @@ export const useChatHandler = () => {
     }
   };
 
+  const handleSendEdit = async (
+    editedContent: string,
+    sequenceNumber: number
+  ) => {
+    if (!selectedChat) return;
+
+    await deleteMessagesIncludingAndAfterOnClient(
+      selectedChat.user_id,
+      selectedChat.id,
+      sequenceNumber
+    );
+
+    const filteredMessages = chatMessages.filter(
+      (chatMessage) => chatMessage.message.sequence_number < sequenceNumber
+    );
+
+    setChatMessages(filteredMessages);
+
+    handleSendMessage(editedContent, filteredMessages, false);
+  };
+
   return {
     chatInputRef,
     handleNewChat,
     handleFocusChatInput,
     handleStopMessage,
     handleSendMessage,
+    handleSendEdit,
   };
 };

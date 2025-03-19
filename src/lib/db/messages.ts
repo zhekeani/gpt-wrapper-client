@@ -92,22 +92,22 @@ export const deleteMessageOnClient = async (messageId: string) => {
   return true;
 };
 
-// export async function deleteMessagesIncludingAndAfter(
-//   userId: string,
-//   chatId: string,
-//   sequenceNumber: number
-// ) {
-//   const { error } = await supabase.rpc("delete_messages_including_and_after", {
-//     p_user_id: userId,
-//     p_chat_id: chatId,
-//     p_sequence_number: sequenceNumber
-//   })
+export async function deleteMessagesIncludingAndAfterOnClient(
+  userId: string,
+  chatId: string,
+  sequenceNumber: number
+) {
+  const { error } = await supabase.rpc("delete_messages_including_and_after", {
+    p_user_id: userId,
+    p_chat_id: chatId,
+    p_sequence_number: sequenceNumber,
+  });
 
-//   if (error) {
-//     return {
-//       error: "Failed to delete messages."
-//     }
-//   }
+  if (error) {
+    return {
+      error: "Failed to delete messages.",
+    };
+  }
 
-//   return true
-// }
+  return true;
+}

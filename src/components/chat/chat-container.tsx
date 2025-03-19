@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import ChatInfo from "./chat-info";
 import ChatInput from "./chat-input";
+import { ChatMessages } from "./chat-messages";
 import ChatNewChatBtn from "./chat-new-chat";
 import ChatScrollBtn from "./chat-scroll-button";
 
@@ -23,8 +24,9 @@ const ChatContainer = () => {
     setChatMessages,
     setSelectedChat,
     setChatSettings,
-
+    isGenerating,
     showSidebar,
+    selectedChat,
   } = useContext(GptWrapperContext);
 
   const { handleFocusChatInput } = useChatHandler();
@@ -103,9 +105,15 @@ const ChatContainer = () => {
 
   return (
     <div className="relative size-full flex flex-col items-center ">
-      <header className="flex sticky top-0 bg-background h-14 w-full shrink-0 items-center justify-between px-4 border-b-[1px] border-b-accent">
+      <header className="flex sticky top-0 bg-background h-14 w-full shrink-0 items-center  px-4 border-b-[1px] border-b-accent">
         <div>
           <SidebarTrigger className={cn("block", showSidebar && "md:hidden")} />
+        </div>
+
+        <div className=" flex w-full items-center justify-center  font-bold">
+          <div className="max-w-[200px] truncate sm:max-w-[400px] md:max-w-[500px] lg:max-w-[600px] xl:max-w-[700px]">
+            {selectedChat?.name || "Chat"}
+          </div>
         </div>
 
         <div className="flex gap-4 items-center">
@@ -114,29 +122,30 @@ const ChatContainer = () => {
         </div>
       </header>
 
-      <div className="hidden absolute right-4 top-2.5 md:flex justify-center">
-        <ChatScrollBtn
-          isAtTop={isAtTop}
-          isAtBottom={isAtBottom}
-          isOverflowing={isOverflowing}
-          scrollToTop={scrollToTop}
-          scrollToBottom={scrollToBottom}
-        />
-      </div>
-
       <div
         className="flex size-full flex-col overflow-auto border-b-[1px] border-b-accent"
         onScroll={handleScroll}
       >
         <div ref={messagesStartRef} />
 
-        {/* <ChatMessages /> */}
+        <ChatMessages />
 
         <div ref={messagesEndRef} />
       </div>
 
       <div className="relative w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
         <ChatInput />
+        {!isGenerating && (
+          <div className="hidden absolute bottom-40 -right-16 md:flex justify-center">
+            <ChatScrollBtn
+              isAtTop={isAtTop}
+              isAtBottom={isAtBottom}
+              isOverflowing={isOverflowing}
+              scrollToTop={scrollToTop}
+              scrollToBottom={() => scrollToBottom("smooth")}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
