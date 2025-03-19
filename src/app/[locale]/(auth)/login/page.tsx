@@ -21,6 +21,7 @@ const Login = () => {
 
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
+  const error = searchParams.get("error");
   const prefillEmail = searchParams.get("email")
     ? decodeURIComponent(searchParams.get("email")!)
     : null;
@@ -92,11 +93,18 @@ const Login = () => {
                     placeholder="••••••••"
                   />
                 </div>
-                {message && (
-                  <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">
-                    {message}
-                  </p>
+                {error && (
+                  <div className="rounded-md border border-destructive bg-destructive/10 p-3 text-center text-sm text-destructive">
+                    {error}
+                  </div>
                 )}
+
+                {!error && message && (
+                  <div className="rounded-md border border-border bg-muted p-3 text-center text-sm text-foreground">
+                    {message}
+                  </div>
+                )}
+
                 <Button disabled={isLoading} type="submit" className="w-full">
                   {isLoading ? (
                     <LoaderCircle className="animate-spin !aspect-square" />

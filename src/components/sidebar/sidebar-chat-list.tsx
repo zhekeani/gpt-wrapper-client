@@ -80,7 +80,7 @@ const SidebarChatList = () => {
             return (
               sortedChats.length > 0 && (
                 <div key={dateCategory} className="pb-2">
-                  <div className="text-muted-foreground mb-1 text-sm font-semibold">
+                  <div className="text-muted-foreground mb-1 text-xs font-semibold">
                     {dateCategory}
                   </div>
 

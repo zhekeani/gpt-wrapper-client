@@ -32,6 +32,7 @@ const Signup = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
+  const error = searchParams.get("error");
   const encodedEmail = searchParams.get("email");
   const prefillEmail = encodedEmail ? decodeURIComponent(encodedEmail) : null;
   const state = searchParams.get("signup-state");
@@ -129,10 +130,16 @@ const Signup = () => {
                       placeholder="••••••••"
                     />
                   </div>
-                  {message && (
-                    <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">
+                  {error && (
+                    <div className="rounded-md border border-destructive bg-destructive/10 p-3 text-center text-sm text-destructive">
+                      {error}
+                    </div>
+                  )}
+
+                  {!error && message && (
+                    <div className="rounded-md border border-border bg-muted p-3 text-center text-sm text-foreground">
                       {message}
-                    </p>
+                    </div>
                   )}
                   <Button disabled={isLoading} type="submit" className="w-full">
                     {isLoading ? (

@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      `/login?message=${error.message}&email=${safeEmailString}`
+      `/login?error=${error.message}&email=${safeEmailString}`
     );
   }
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   if (profileError) {
     return NextResponse.redirect(
       buildUrl(
-        `/login?message=${profileError.message}&email=${safeEmailString}`,
+        `/login?error=${profileError.message}&email=${safeEmailString}`,
         request
       )
     );

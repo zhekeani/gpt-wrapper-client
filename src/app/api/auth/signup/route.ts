@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   if (!isNotEmptyString(email) || !email || !emailRegex.test(email)) {
     return NextResponse.redirect(
       buildUrl(
-        `/signup?message=${encodeURIComponent(
+        `/signup?error=${encodeURIComponent(
           "Invalid email address"
         )}&email=${safeEmailString}`,
         request
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       : `Registration error: ${userError.message}`;
 
     return NextResponse.redirect(
-      buildUrl(`/signup?message=${errorMsg}&email=${safeEmailString}`, request),
+      buildUrl(`/signup?error=${errorMsg}&email=${safeEmailString}`, request),
       302
     );
   }
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     await supabaseAdmin.auth.admin.deleteUser(userData.user.id);
     return NextResponse.redirect(
       buildUrl(
-        `/signup?message=${"Server error: unable to create user profile"}&email=${safeEmailString}`,
+        `/signup?error=${"Server error: unable to create user profile"}&email=${safeEmailString}`,
         request
       ),
       302

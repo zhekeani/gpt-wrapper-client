@@ -88,7 +88,7 @@ const SidebarChatItem = ({ chat }: SidebarChatItemProps) => {
         />
       )}
 
-      <div className="ml-3 flex-1 truncate text-sm font-medium">
+      <div className="ml-3 flex-1 truncate text-sm font-normal">
         {chat.name}
       </div>
 
