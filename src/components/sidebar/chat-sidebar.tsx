@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Search, SquarePen } from "lucide-react";
 import { ComponentProps } from "react";
+import SidebarChatList from "./sidebar-chat-list";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ChatSideBarProps extends ComponentProps<typeof Sidebar> {}
@@ -28,7 +29,9 @@ const ChatSideBar = ({ ...props }: ChatSideBarProps) => {
         </div>
       </SidebarHeader>
 
-      <SidebarContent></SidebarContent>
+      <SidebarContent className="px-3">
+        <SidebarChatList />
+      </SidebarContent>
     </Sidebar>
   );
 };
