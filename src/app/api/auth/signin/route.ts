@@ -7,10 +7,22 @@ export async function POST(request: NextRequest) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  const supabase = await getSupabaseCookiesUtilClient();
-  const user = (await supabase.auth.getUser()).data.user;
-
   const safeEmailString = encodeURIComponent(email);
+
+  const supabase = await getSupabaseCookiesUtilClient();
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return NextResponse.redirect(
+      `/login?message=${error.message}&email=${safeEmailString}`
+    );
+  }
+
+  const user = data.user;
 
   if (!user || !user.confirmed_at) {
     return NextResponse.redirect(
@@ -27,24 +39,16 @@ export async function POST(request: NextRequest) {
 
   if (profileError) {
     return NextResponse.redirect(
-      `/login?message=${profileError.message}&email=${safeEmailString}`
+      buildUrl(
+        `/login?message=${profileError.message}&email=${safeEmailString}`,
+        request
+      )
     );
   }
 
   if (profileData && !profileData.has_onboarded) {
-    return NextResponse.redirect(`/setup`);
+    return NextResponse.redirect(buildUrl(`/setup`, request));
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    return NextResponse.redirect(
-      `/login?message=${error.message}&email=${safeEmailString}`
-    );
-  }
-
-  return NextResponse.redirect("/chat");
+  return NextResponse.redirect(buildUrl("/chat", request));
 }

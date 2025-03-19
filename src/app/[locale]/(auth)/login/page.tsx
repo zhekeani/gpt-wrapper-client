@@ -99,7 +99,7 @@ const Login = () => {
                 )}
                 <Button disabled={isLoading} type="submit" className="w-full">
                   {isLoading ? (
-                    <LoaderCircle className=" animate-spin !aspect-square" />
+                    <LoaderCircle className="animate-spin !aspect-square" />
                   ) : (
                     "Login"
                   )}

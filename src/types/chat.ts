@@ -12,7 +12,6 @@ export interface ChatSettings {
 
 export interface ChatPayload {
   chatSettings: ChatSettings;
-  workspaceInstructions: string;
   chatMessages: ChatMessage[];
   // assistant: Tables<"assistants"> | null
   // messageFileItems: Tables<"file_items">[]

@@ -12,18 +12,21 @@ interface TooltipWrapperProps {
 
   delayDuration?: number;
   side?: "left" | "right" | "top" | "bottom";
+
+  asChild?: boolean;
 }
 
 export const TooltipWrapper: FC<TooltipWrapperProps> = ({
   display,
   trigger,
+  asChild = false,
   delayDuration = 500,
   side = "right",
 }) => {
   return (
     <TooltipProvider delayDuration={delayDuration}>
       <Tooltip>
-        <TooltipTrigger>{trigger}</TooltipTrigger>
+        <TooltipTrigger asChild={asChild}>{trigger}</TooltipTrigger>
 
         {display && <TooltipContent side={side}>{display}</TooltipContent>}
       </Tooltip>

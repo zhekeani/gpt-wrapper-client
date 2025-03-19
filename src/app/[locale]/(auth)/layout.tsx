@@ -2,7 +2,6 @@ import QueryProvider from "@/components/utility/query-provider";
 import { getSupabaseCookiesUtilClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { toast } from "sonner";
 
 const AuthGroupLayout = async ({ children }: { children: ReactNode }) => {
   const supabase = await getSupabaseCookiesUtilClient();
@@ -26,7 +25,6 @@ const AuthGroupLayout = async ({ children }: { children: ReactNode }) => {
 
       if (error) {
         console.error(error);
-        toast.error(error.message);
       }
 
       if (latestChat) {

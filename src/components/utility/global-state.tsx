@@ -6,7 +6,7 @@ import { fetchOpenRouterModels } from "@/lib/models/fetch-models";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { ChatSettings } from "@/types/chat";
 import { ChatMessage } from "@/types/chat-message";
-import { OpenRouterLLM } from "@/types/llms";
+import { LLMID, OpenRouterLLM } from "@/types/llms";
 import { Tables } from "@/types/supabase.types";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export const GlobalState = ({ children }: GlobalStateProps) => {
   const [userInput, setUserInput] = useState<string>("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatSettings, setChatSettings] = useState<ChatSettings>({
-    model: "gpt-4-turbo-preview",
+    model: "mistralai/mixtral-8x22b-instruct" as LLMID,
     prompt: "You are a helpful AI assistant.",
     temperature: 0.5,
     contextLength: 4000,

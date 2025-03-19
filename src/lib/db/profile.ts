@@ -3,6 +3,12 @@ import { TablesInsert, TablesUpdate } from "@/types/supabase.types";
 
 const supabase = getSupabaseBrowserClient();
 
+export function checkApiKey(apiKey: string | null, keyName: string) {
+  if (apiKey === null || apiKey === "") {
+    throw new Error(`${keyName} API Key not found`);
+  }
+}
+
 export const getProfileByUserIdOnClient = async (userId: string) => {
   const { data: profile, error } = await supabase
     .from("profiles")

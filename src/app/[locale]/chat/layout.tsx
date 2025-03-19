@@ -66,7 +66,7 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
     // DEFAULT CHAT SETTING
     setChatSettings({
       model: (searchParams.get("model") ||
-        "open-r1/olympiccoder-7b:free") as LLMID,
+        "mistralai/mixtral-8x22b-instruct") as LLMID,
       prompt: "You are a friendly, helpful AI assistant.",
       temperature: 0.5,
       contextLength: 4096,
