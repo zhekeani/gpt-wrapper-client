@@ -6,15 +6,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { GptWrapperContext } from "@/context/context";
 import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits";
+import { useModelsStore } from "@/store/models-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { SlidersHorizontal } from "lucide-react";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import ChatSettingsForm from "./chat-settings-form";
 
 const ChatSettings = () => {
-  const { chatSettings, setChatSettings, availableOpenRouterModels } =
-    useContext(GptWrapperContext);
+  const chatSettings = usePassiveChatStore((state) => state.chatSettings);
+  const setChatSettings = usePassiveChatStore((state) => state.setChatSettings);
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
 
   useEffect(() => {
     if (!chatSettings) return;

@@ -8,6 +8,7 @@ import {
 import { ChatPayload, ChatSettings } from "@/types/chat";
 import { ChatMessage } from "@/types/chat-message";
 import { LLM } from "@/types/llms";
+import { SetState } from "@/types/store";
 import { Tables, TablesInsert } from "@/types/supabase.types";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
@@ -19,6 +20,8 @@ export const validateChatSettings = (
   profile: Tables<"profiles"> | null,
   messageContent: string
 ) => {
+  console.log(modelData);
+
   if (!chatSettings) {
     throw new Error("Chat settings not found");
   }
@@ -41,7 +44,7 @@ export const createTempMessages = (
   chatMessages: ChatMessage[],
   chatSettings: ChatSettings,
   isRegeneration: boolean,
-  setChatMessages: Dispatch<SetStateAction<ChatMessage[]>>
+  setChatMessages: (messages: SetState<ChatMessage[]>) => void
 ) => {
   const tempUserChatMessage: ChatMessage = {
     message: {
@@ -102,9 +105,9 @@ export const handleHostedChat = async (
   tempAssistantChatMessage: ChatMessage,
   isRegeneration: boolean,
   newAbortController: AbortController,
-  setIsGenerating: Dispatch<SetStateAction<boolean>>,
-  setFirstTokenReceived: Dispatch<SetStateAction<boolean>>,
-  setChatMessages: Dispatch<SetStateAction<ChatMessage[]>>
+  setIsGenerating: (status: boolean) => void,
+  setFirstTokenReceived: (status: boolean) => void,
+  setChatMessages: (messages: SetState<ChatMessage[]>) => void
 ) => {
   const messages = buildFinalMessages(payload, profile);
 
@@ -138,8 +141,8 @@ export const fetchChatResponse = async (
   url: string,
   body: object,
   controller: AbortController,
-  setIsGenerating: Dispatch<SetStateAction<boolean>>,
-  setChatMessages: Dispatch<SetStateAction<ChatMessage[]>>
+  setIsGenerating: (status: boolean) => void,
+  setChatMessages: (messages: SetState<ChatMessage[]>) => void
 ) => {
   const response = await fetch(url, {
     method: "POST",
@@ -166,8 +169,8 @@ export const processResponse = async (
   response: Response,
   lastChatMessage: ChatMessage,
   controller: AbortController,
-  setFirstTokenReceived: Dispatch<SetStateAction<boolean>>,
-  setChatMessages: Dispatch<SetStateAction<ChatMessage[]>>
+  setFirstTokenReceived: (status: boolean) => void,
+  setChatMessages: (messages: SetState<ChatMessage[]>) => void
 ) => {
   let fullText = "";
   let contentToAdd = "";

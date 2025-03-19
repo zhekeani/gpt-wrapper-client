@@ -1,15 +1,16 @@
-import { GptWrapperContext } from "@/context/context";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import {
   type UIEventHandler,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
 
 export const useChatScroll = () => {
-  const { isGenerating, chatMessages } = useContext(GptWrapperContext);
+  const isGenerating = useActiveChatStore((state) => state.isGenerating);
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
 
   const messagesStartRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);

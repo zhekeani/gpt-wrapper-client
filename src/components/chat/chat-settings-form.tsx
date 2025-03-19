@@ -6,12 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { TextareaAutosize } from "@/components/ui/textarea-autosize";
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { GptWrapperContext } from "@/context/context";
 import { CHAT_SETTING_LIMITS } from "@/lib/chat-setting-limits";
 import { cn } from "@/lib/utils";
+import { useModelsStore } from "@/store/models-store";
+import { useProfileStore } from "@/store/user-profile-store";
 import { ChatSettings } from "@/types/chat";
 import { AlertCircle, Info } from "lucide-react";
-import { useContext } from "react";
 import { AdvancedSettings } from "./advanced-settings";
 
 interface ChatSettingsFormProps {
@@ -27,7 +27,7 @@ const ChatSettingsForm = ({
   useAdvancedDropdown = true,
   showTooltip = true,
 }: ChatSettingsFormProps) => {
-  const { profile } = useContext(GptWrapperContext);
+  const profile = useProfileStore((state) => state.profile);
 
   if (!profile) return null;
 
@@ -102,7 +102,10 @@ const AdvancedContent = ({
   onChangeChatSettings,
   showTooltip,
 }: AdvancedContentProps) => {
-  const { profile, availableOpenRouterModels } = useContext(GptWrapperContext);
+  const profile = useProfileStore((state) => state.profile);
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
 
   function findOpenRouterModel(modelId: string) {
     return availableOpenRouterModels.find((model) => model.modelId === modelId);

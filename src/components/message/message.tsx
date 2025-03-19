@@ -2,13 +2,16 @@ import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { Button } from "@/components/ui/button";
 import { TextareaAutosize } from "@/components/ui/textarea-autosize";
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { useModelsStore } from "@/store/models-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
+import { useProfileStore } from "@/store/user-profile-store";
 import { LLM } from "@/types/llms";
 import { Tables } from "@/types/supabase.types";
 import { LoaderCircle, Pencil, Smile, Sparkles } from "lucide-react";
 import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MessageActions } from "./message-actions";
 import { MessageMarkdown } from "./message-markdown";
 
@@ -34,14 +37,19 @@ const Message = ({
 
   const editInputRef = useRef<HTMLTextAreaElement>(null);
 
-  const {
-    profile,
-    setIsGenerating,
-    availableOpenRouterModels,
-    chatMessages,
-    firstTokenReceived,
-    isGenerating,
-  } = useContext(GptWrapperContext);
+  const profile = useProfileStore((state) => state.profile);
+
+  const setIsGenerating = useActiveChatStore((state) => state.setIsGenerating);
+  const isGenerating = useActiveChatStore((state) => state.isGenerating);
+  const firstTokenReceived = useActiveChatStore(
+    (state) => state.firstTokenReceived
+  );
+
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
+
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
 
   const { handleSendMessage } = useChatHandler();
 

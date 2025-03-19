@@ -1,8 +1,6 @@
-import { GlobalState } from "@/components/utility/global-state";
 import { Providers } from "@/components/utility/providers";
 import TranslationsProvider from "@/components/utility/translations-provider";
 import initTranslations from "@/lib/i18n";
-import { getSupabaseCookiesUtilClient } from "@/lib/supabase/server";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
@@ -67,9 +65,6 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const { locale } = await params;
 
-  const supabase = await getSupabaseCookiesUtilClient();
-  const user = (await supabase.auth.getUser()).data.user;
-
   const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
@@ -84,11 +79,7 @@ export default async function RootLayout({
             <Toaster richColors position="top-center" duration={3000} />
 
             <div className="bg-background text-foreground flex h-dvh flex-col items-center overflow-x-auto">
-              {user && user.confirmed_at ? (
-                <GlobalState>{children}</GlobalState>
-              ) : (
-                children
-              )}
+              {children}
             </div>
           </TranslationsProvider>
         </Providers>

@@ -1,37 +1,50 @@
-import { GptWrapperContext } from "@/context/context";
-import { updateChatOnClient } from "@/lib/db/chats";
-import { deleteMessagesIncludingAndAfterOnClient } from "@/lib/db/messages";
-import { ChatPayload } from "@/types/chat";
-import { ChatMessage } from "@/types/chat-message";
-import { useRouter } from "next/navigation";
-import { useContext, useRef } from "react";
 import {
   createTempMessages,
   handleCreateChat,
   handleCreateMessages,
   handleHostedChat,
   validateChatSettings,
-} from "../../../app/[locale]/chat/../../../components/chat/chat-helpers";
+} from "@/components/chat/chat-helpers";
+import { updateChatOnClient } from "@/lib/db/chats";
+import { deleteMessagesIncludingAndAfterOnClient } from "@/lib/db/messages";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { useItemsStore } from "@/store/items-store";
+import { useModelsStore } from "@/store/models-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
+import { useProfileStore } from "@/store/user-profile-store";
+import { ChatPayload } from "@/types/chat";
+import { ChatMessage } from "@/types/chat-message";
+import { useRouter } from "next/navigation";
+import { useRef } from "react";
 
 export const useChatHandler = () => {
   const router = useRouter();
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
-  const {
-    profile,
-    setIsGenerating,
-    setUserInput,
-    setChatMessages,
-    setFirstTokenReceived,
-    selectedChat,
-    setChats,
-    chatMessages,
-    availableOpenRouterModels,
-    setAbortController,
-    abortController,
-    chatSettings,
-    setSelectedChat,
-  } = useContext(GptWrapperContext);
+  const profile = useProfileStore((state) => state.profile);
+
+  const setIsGenerating = useActiveChatStore((state) => state.setIsGenerating);
+  const setFirstTokenReceived = useActiveChatStore(
+    (state) => state.setFirstTokenReceived
+  );
+  const setAbortController = useActiveChatStore(
+    (state) => state.setAbortController
+  );
+  const abortController = useActiveChatStore((state) => state.abortController);
+
+  const setUserInput = usePassiveChatStore((state) => state.setUserInput);
+  const setSelectedChat = usePassiveChatStore((state) => state.setSelectedChat);
+  const selectedChat = usePassiveChatStore((state) => state.selectedChat);
+
+  const setChatMessages = usePassiveChatStore((state) => state.setChatMessages);
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
+  const setChats = useItemsStore((state) => state.setChats);
+
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
+
+  const chatSettings = usePassiveChatStore((state) => state.chatSettings);
 
   // Handle new chat
   const handleNewChat = () => {
@@ -69,6 +82,8 @@ export const useChatHandler = () => {
 
       const newAbortController = new AbortController();
       setAbortController(newAbortController);
+
+      console.log(chatSettings, availableOpenRouterModels);
 
       const modelData = availableOpenRouterModels.find(
         (llm) => llm.modelId === chatSettings?.model

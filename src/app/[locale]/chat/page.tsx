@@ -4,12 +4,13 @@ import ChatContainer from "@/components/chat/chat-container";
 import ChatInput from "@/components/chat/chat-input";
 import ChatSettings from "@/components/chat/chat-settings";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
-import { useContext } from "react";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
+import { useSidebarStore } from "@/store/sidebar-store";
 
 const ChatPage = () => {
-  const { showSidebar, chatMessages } = useContext(GptWrapperContext);
+  const showSidebar = useSidebarStore((state) => state.showSidebar);
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
 
   return (
     <>

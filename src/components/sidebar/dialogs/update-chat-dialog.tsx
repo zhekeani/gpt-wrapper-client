@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GptWrapperContext } from "@/context/context";
 import { updateChatOnClient } from "@/lib/db/chats";
+import { useItemsStore } from "@/store/items-store";
 import { Tables } from "@/types/supabase.types";
-import React, { ReactNode, useContext, useRef, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 
 interface UpdateChatProps {
   chat: Tables<"chats">;
@@ -24,7 +24,7 @@ const UpdateChatDialog = ({ chat, children }: UpdateChatProps) => {
   const [name, setName] = useState(chat.name);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { setChats } = useContext(GptWrapperContext);
+  const setChats = useItemsStore((state) => state.setChats);
 
   const handleUpdateChat = async () => {
     const updatedChat = await updateChatOnClient(chat.id, {

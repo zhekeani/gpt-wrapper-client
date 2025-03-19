@@ -1,12 +1,12 @@
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import Message from "@/components/message/message";
-import { GptWrapperContext } from "@/context/context";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { Tables } from "@/types/supabase.types";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export const ChatMessages = () => {
   const [editingMessage, setEditingMessage] = useState<Tables<"messages">>();
-  const { chatMessages } = useContext(GptWrapperContext);
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
 
   const { handleSendEdit } = useChatHandler();
 

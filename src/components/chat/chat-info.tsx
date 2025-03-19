@@ -1,10 +1,9 @@
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { GptWrapperContext } from "@/context/context";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { Info } from "lucide-react";
-import { useContext } from "react";
 
 const ChatInfo = () => {
-  const { selectedChat } = useContext(GptWrapperContext);
+  const selectedChat = usePassiveChatStore((state) => state.selectedChat);
 
   if (!selectedChat) return null;
 

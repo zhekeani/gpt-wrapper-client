@@ -1,7 +1,7 @@
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { GptWrapperContext } from "@/context/context";
+import { useActiveChatStore } from "@/store/active-chat-store";
 import { Check, Copy, Repeat } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface MessageActionsProps {
   isAssistant: boolean;
@@ -20,8 +20,7 @@ export const MessageActions = ({
   onCopy,
   onRegenerate,
 }: MessageActionsProps) => {
-  const { isGenerating } = useContext(GptWrapperContext);
-
+  const isGenerating = useActiveChatStore((state) => state.isGenerating);
   const [showCheckmark, setShowCheckmark] = useState(false);
 
   const handleCopy = () => {

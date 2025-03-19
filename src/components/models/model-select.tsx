@@ -5,10 +5,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { GptWrapperContext } from "@/context/context";
+import { useModelsStore } from "@/store/models-store";
+import { useProfileStore } from "@/store/user-profile-store";
 import { LLM, LLMID } from "@/types/llms";
 import { Check, ChevronDown, Sparkles } from "lucide-react";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ModelOption from "./model-option";
 
 interface ModelSelectProps {
@@ -17,7 +18,10 @@ interface ModelSelectProps {
 }
 
 const ModelSelect = ({ onSelectModel, selectedModelId }: ModelSelectProps) => {
-  const { profile, availableOpenRouterModels } = useContext(GptWrapperContext);
+  const profile = useProfileStore((state) => state.profile);
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
 
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);

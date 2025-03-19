@@ -7,23 +7,28 @@ import {
   SETUP_STEP_COUNT,
   StepContainer,
 } from "@/components/setup/step-container";
-import { GptWrapperContext } from "@/context/context";
 import {
   getProfileByUserIdOnClient,
   updateProfileOnClient,
 } from "@/lib/db/profile";
 import { fetchOpenRouterModels } from "@/lib/models/fetch-models";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { useModelsStore } from "@/store/models-store";
+import { useProfileStore } from "@/store/user-profile-store";
 import { TablesUpdate } from "@/types/supabase.types";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Setup = () => {
-  const { profile, setProfile, setAvailableOpenRouterModels } =
-    useContext(GptWrapperContext);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const profile = useProfileStore((state) => state.profile);
+  const setProfile = useProfileStore((state) => state.setProfile);
+  const setAvailableOpenRouterModels = useModelsStore(
+    (state) => state.setAvailableOpenRouterModels
+  );
 
   const isInitialLoad = useRef<boolean>(true);
 
@@ -57,6 +62,7 @@ const Setup = () => {
             if (profile["openrouter_api_key"]) {
               const openRouterModels = await fetchOpenRouterModels();
               if (!openRouterModels) return;
+              console.log(openRouterModels);
               setAvailableOpenRouterModels(openRouterModels);
             }
             return router.push(`/chat`);

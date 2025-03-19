@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { GptWrapperContext } from "@/context/context";
 import { deleteChatOnClient } from "@/lib/db/chats";
+import { useItemsStore } from "@/store/items-store";
 import { Tables } from "@/types/supabase.types";
-import React, { ReactNode, useContext, useRef, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 
 interface DeleteChatProps {
   chat: Tables<"chats">;
@@ -23,7 +23,7 @@ const DeleteChatDialog = ({ chat, children }: DeleteChatProps) => {
   const [showChatDialog, setShowChatDialog] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { setChats } = useContext(GptWrapperContext);
+  const setChats = useItemsStore((state) => state.setChats);
   const { handleNewChat } = useChatHandler();
 
   const handleDeleteChat = async () => {

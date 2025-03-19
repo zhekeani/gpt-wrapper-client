@@ -1,14 +1,15 @@
 "use client";
 
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
+import { useModelsStore } from "@/store/models-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { LLM } from "@/types/llms";
 import { Tables } from "@/types/supabase.types";
 import { BotMessageSquare, Edit, Sparkles, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import DeleteChatDialog from "./dialogs/delete-chat-dialog";
 import UpdateChatDialog from "./dialogs/update-chat-dialog";
 
@@ -17,8 +18,10 @@ interface SidebarChatItemProps {
 }
 
 const SidebarChatItem = ({ chat }: SidebarChatItemProps) => {
-  const { selectedChat, availableOpenRouterModels } =
-    useContext(GptWrapperContext);
+  const selectedChat = usePassiveChatStore((state) => state.selectedChat);
+  const availableOpenRouterModels = useModelsStore(
+    (state) => state.availableOpenRouterModels
+  );
 
   const router = useRouter();
   const params = useParams();

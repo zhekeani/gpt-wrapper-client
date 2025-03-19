@@ -1,49 +1,104 @@
 "use client";
 
 import Dashboard from "@/components/ui/dashboard";
-import { GptWrapperContext } from "@/context/context";
 import { getChatsByUserIdOnClient } from "@/lib/db/chats";
 import { getPresetsByUserIdOnClient } from "@/lib/db/presets";
+import { getProfileByUserIdOnClient } from "@/lib/db/profile";
+import { fetchOpenRouterModels } from "@/lib/models/fetch-models";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { useItemsStore } from "@/store/items-store";
+import { useModelsStore } from "@/store/models-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
+import { useProfileStore } from "@/store/user-profile-store";
 import { LLMID } from "@/types/llms";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import Loading from "../loading";
 
 const ChatLayout = ({ children }: { children: ReactNode }) => {
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-
-  const {
-    setSelectedChat,
-    setChatMessages,
-    setUserInput,
-    setIsGenerating,
-    setFirstTokenReceived,
-    setChatSettings,
-    setChats,
-    setPresets,
-  } = useContext(GptWrapperContext);
-
   const [loading, setLoading] = useState(true);
   const isInitialLoad = useRef<boolean>(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    (async () => {
-      if (isInitialLoad.current) {
-        const supabase = getSupabaseBrowserClient();
-        const session = (await supabase.auth.getSession()).data.session;
+  const setProfile = useProfileStore((state) => state.setProfile);
+  const setAvailableOpenRouterModels = useModelsStore(
+    (state) => state.setAvailableOpenRouterModels
+  );
 
-        if (!session) {
-          return router.push("/login");
-        }
+  const setSelectedChat = usePassiveChatStore((state) => state.setSelectedChat);
+  const setChatMessages = usePassiveChatStore((state) => state.setChatMessages);
+  const setUserInput = usePassiveChatStore((state) => state.setUserInput);
+  const setChatSettings = usePassiveChatStore((state) => state.setChatSettings);
 
-        isInitialLoad.current = false;
+  const setIsGenerating = useActiveChatStore((state) => state.setIsGenerating);
+  const setFirstTokenReceived = useActiveChatStore(
+    (state) => state.setFirstTokenReceived
+  );
+
+  const setChats = useItemsStore((state) => state.setChats);
+  const setPresets = useItemsStore((state) => state.setPresets);
+
+  const fetchProfileAndModels = useCallback(async () => {
+    setLoading(true);
+    const supabase = getSupabaseBrowserClient();
+    const user = (await supabase.auth.getUser()).data.user;
+
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    const profile = await getProfileByUserIdOnClient(user.id);
+    setProfile(profile);
+
+    if (profile?.openrouter_api_key) {
+      const openRouterModels = await fetchOpenRouterModels();
+      if (openRouterModels) {
+        setAvailableOpenRouterModels(openRouterModels);
       }
-    })();
+    }
+
+    setLoading(false);
+  }, [router, setAvailableOpenRouterModels, setProfile]);
+
+  const fetchChatsData = useCallback(async () => {
+    setLoading(true);
+    const supabase = getSupabaseBrowserClient();
+    const user = (await supabase.auth.getUser()).data.user;
+
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    const [chats, presets] = await Promise.all([
+      getChatsByUserIdOnClient(user.id),
+      getPresetsByUserIdOnClient(user.id),
+    ]);
+
+    setChats(chats);
+    setPresets(presets);
+    setLoading(false);
+  }, [router, setChats, setPresets]);
+
+  const resetChatState = useCallback(() => {
+    setUserInput("");
+    setChatMessages([]);
+    setSelectedChat(null);
+    setIsGenerating(false);
+    setFirstTokenReceived(false);
+
+    setChatSettings({
+      model: (searchParams.get("model") ||
+        "mistralai/mixtral-8x22b-instruct") as LLMID,
+      prompt: "You are a friendly, helpful AI assistant.",
+      temperature: 0.5,
+      contextLength: 4096,
+      includeProfileContext: true,
+    });
   }, [
-    router,
     searchParams,
     setChatMessages,
     setChatSettings,
@@ -54,43 +109,13 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
   ]);
 
   useEffect(() => {
-    (async () => await fetchChatsData())();
-
-    setUserInput("");
-    setChatMessages([]);
-    setSelectedChat(null);
-
-    setIsGenerating(false);
-    setFirstTokenReceived(false);
-
-    // DEFAULT CHAT SETTING
-    setChatSettings({
-      model: (searchParams.get("model") ||
-        "mistralai/mixtral-8x22b-instruct") as LLMID,
-      prompt: "You are a friendly, helpful AI assistant.",
-      temperature: 0.5,
-      contextLength: 4096,
-      includeProfileContext: true,
-    });
-  }, []);
-
-  const fetchChatsData = async () => {
-    setLoading(true);
-
-    const supabase = getSupabaseBrowserClient();
-    const user = (await supabase.auth.getUser()).data.user;
-
-    if (!user) {
-      return router.push("/login");
+    if (isInitialLoad.current) {
+      fetchProfileAndModels();
+      resetChatState();
+      fetchChatsData();
+      isInitialLoad.current = false;
     }
-
-    const chats = await getChatsByUserIdOnClient(user.id);
-    setChats(chats);
-    const presets = await getPresetsByUserIdOnClient(user.id);
-    setPresets(presets);
-
-    setLoading(false);
-  };
+  }, [fetchChatsData, fetchProfileAndModels, resetChatState]);
 
   if (loading) {
     return <Loading />;

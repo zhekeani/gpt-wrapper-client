@@ -1,14 +1,16 @@
+import Loading from "@/app/[locale]/loading";
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { useChatScroll } from "@/components/chat/chat-hooks/use-chat-scroll";
-import Loading from "@/app/[locale]/loading";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { GptWrapperContext } from "@/context/context";
 import { getChatByIdOnClient } from "@/lib/db/chats";
 import { getMessagesByChatIdOnClient } from "@/lib/db/messages";
 import { cn } from "@/lib/utils";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
+import { useSidebarStore } from "@/store/sidebar-store";
 import { LLMID } from "@/types/llms";
 import { useParams, useSearchParams } from "next/navigation";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ChatInfo from "./chat-info";
 import ChatInput from "./chat-input";
 import { ChatMessages } from "./chat-messages";
@@ -21,14 +23,12 @@ const ChatContainer = () => {
   const params = useParams() as { chatId: string | null };
   const searchParams = useSearchParams();
 
-  const {
-    setChatMessages,
-    setSelectedChat,
-    setChatSettings,
-    isGenerating,
-    showSidebar,
-    selectedChat,
-  } = useContext(GptWrapperContext);
+  const setChatMessages = usePassiveChatStore((state) => state.setChatMessages);
+  const setSelectedChat = usePassiveChatStore((state) => state.setSelectedChat);
+  const setChatSettings = usePassiveChatStore((state) => state.setChatSettings);
+  const isGenerating = useActiveChatStore((state) => state.isGenerating);
+  const showSidebar = useSidebarStore((state) => state.showSidebar);
+  const selectedChat = usePassiveChatStore((state) => state.selectedChat);
 
   const { handleFocusChatInput } = useChatHandler();
 

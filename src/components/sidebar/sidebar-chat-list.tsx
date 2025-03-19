@@ -1,14 +1,14 @@
-import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
+import { useItemsStore } from "@/store/items-store";
 import { Tables } from "@/types/supabase.types";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SidebarChatItem from "./sidebar-chat-item";
 
 const SidebarChatList = () => {
   const divRef = useRef<HTMLDivElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
-  const { chats } = useContext(GptWrapperContext);
+  const chats = useItemsStore((state) => state.chats);
 
   const getSortedData = (
     chats: Tables<"chats">[],

@@ -1,17 +1,20 @@
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { TextareaAutosize } from "@/components/ui/textarea-autosize";
-import { GptWrapperContext } from "@/context/context";
 import { cn } from "@/lib/utils";
+import { useActiveChatStore } from "@/store/active-chat-store";
+import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { CircleStop, Send } from "lucide-react";
-import { KeyboardEvent, useContext, useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const ChatInput = () => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const { t } = useTranslation();
 
-  const { userInput, chatMessages, isGenerating, setUserInput } =
-    useContext(GptWrapperContext);
+  const userInput = usePassiveChatStore((state) => state.userInput);
+  const setUserInput = usePassiveChatStore((state) => state.setUserInput);
+  const chatMessages = usePassiveChatStore((state) => state.chatMessages);
+  const isGenerating = useActiveChatStore((state) => state.isGenerating);
 
   const { chatInputRef, handleSendMessage, handleStopMessage } =
     useChatHandler();
