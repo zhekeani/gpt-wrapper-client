@@ -55,7 +55,7 @@ const SidebarChatList = () => {
   }, [chats]);
 
   return (
-    <div ref={divRef} className="mt-2 flex flex-col overflow-auto">
+    <div ref={divRef} className="mt-2 flex flex-col overflow-auto px-3">
       {chats.length === 0 && (
         <div className="flex grow flex-col items-center justify-center">
           <div className=" text-centertext-muted-foreground p-8 text-lg italic">

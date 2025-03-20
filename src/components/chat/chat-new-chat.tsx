@@ -1,11 +1,9 @@
-import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
+import { Button } from "@/components/ui/button";
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper";
-import { MessageSquarePlus } from "lucide-react";
-import { Button } from "../ui/button";
+import { SquarePen } from "lucide-react";
+import Link from "next/link";
 
 const ChatNewChatBtn = () => {
-  const { handleNewChat } = useChatHandler();
-
   return (
     <TooltipWrapper
       asChild
@@ -13,11 +11,10 @@ const ChatNewChatBtn = () => {
       delayDuration={200}
       display={<div>Start a new chat</div>}
       trigger={
-        <Button onClick={handleNewChat} variant={"ghost"} size={"icon"}>
-          <MessageSquarePlus
-            className=" hover:opacity-50 !size-5"
-            strokeWidth={2}
-          />
+        <Button variant={"ghost"} size={"icon"}>
+          <Link href={"/chat"}>
+            <SquarePen className=" hover:opacity-50 !size-5" strokeWidth={2} />
+          </Link>
         </Button>
       }
     />

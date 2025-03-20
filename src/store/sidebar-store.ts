@@ -6,6 +6,6 @@ interface SidebarState {
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
-  showSidebar: true,
+  showSidebar: false,
   toggleSidebar: () => set((prev) => ({ showSidebar: !prev.showSidebar })),
 }));

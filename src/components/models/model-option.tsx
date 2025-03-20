@@ -14,7 +14,7 @@ const ModelOption = ({ model, onSelect }: ModelOptionProps) => {
     >
       <div className="flex items-center space-x-2">
         <Sparkles className="size-4" />
-        <div className="text-sm font-semibold">{model.modelName}</div>
+        <div className="text-xs-sm/xs-sm font-semibold">{model.modelName}</div>
       </div>
     </div>
     // <TooltipWrapper

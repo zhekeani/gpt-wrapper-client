@@ -1,6 +1,7 @@
 import Loading from "@/app/[locale]/loading";
 import { useChatHandler } from "@/components/chat/chat-hooks/use-chat-handler";
 import { useChatScroll } from "@/components/chat/chat-hooks/use-chat-scroll";
+import HeaderProfileButton from "@/components/profile/header-profile-button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getChatByIdOnClient } from "@/lib/db/chats";
 import { getMessagesByChatIdOnClient } from "@/lib/db/messages";
@@ -9,7 +10,7 @@ import { useActiveChatStore } from "@/store/active-chat-store";
 import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { useSidebarStore } from "@/store/sidebar-store";
 import { LLMID } from "@/types/llms";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ChatInfo from "./chat-info";
 import ChatInput from "./chat-input";
@@ -18,10 +19,9 @@ import ChatNewChatBtn from "./chat-new-chat";
 import ChatScrollBtn from "./chat-scroll-button";
 
 const ChatContainer = () => {
-  const [loading, setLoading] = useState(true);
   const isInitialLoad = useRef<boolean>(true);
   const params = useParams() as { chatId: string | null };
-  const searchParams = useSearchParams();
+  const [loading, setLoading] = useState(!!params.chatId);
 
   const setChatMessages = usePassiveChatStore((state) => state.setChatMessages);
   const setSelectedChat = usePassiveChatStore((state) => state.setSelectedChat);
@@ -85,7 +85,7 @@ const ChatContainer = () => {
     };
 
     if (isInitialLoad.current) {
-      const chatId = params.chatId || searchParams.get("chatId") || null;
+      const chatId = params.chatId || null;
       fetchData(chatId);
       isInitialLoad.current = false;
     }
@@ -95,7 +95,6 @@ const ChatContainer = () => {
     handleFocusChatInput,
     params.chatId,
     scrollToBottom,
-    searchParams,
     setIsAtBottom,
   ]);
 
@@ -106,8 +105,11 @@ const ChatContainer = () => {
   return (
     <div className="relative size-full flex flex-col items-center ">
       <header className="flex sticky top-0 bg-background h-14 w-full shrink-0 items-center  px-4 border-b-[1px] border-b-accent">
-        <div>
+        <div className="flex items-center gap-1">
           <SidebarTrigger className={cn("block", showSidebar && "md:hidden")} />
+          <div className="hidden sm:block">
+            <ChatNewChatBtn />
+          </div>
         </div>
 
         <div className=" flex w-full items-center justify-center  font-bold">
@@ -118,7 +120,12 @@ const ChatContainer = () => {
 
         <div className="flex gap-4 items-center">
           <ChatInfo />
-          <ChatNewChatBtn />
+          <div className="hidden sm:block">
+            <HeaderProfileButton />
+          </div>
+          <div className="sm:hidden">
+            <ChatNewChatBtn />
+          </div>
         </div>
       </header>
 

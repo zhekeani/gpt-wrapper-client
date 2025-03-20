@@ -10,6 +10,7 @@ import {
   PopoverDivider,
   PopoverGroup,
 } from "@/components/ui/popover-extended";
+import { cn } from "@/lib/utils";
 import { Tables } from "@/types/supabase.types";
 import { BrainCircuit, LogOut, UserCog } from "lucide-react";
 import { ReactNode, useState } from "react";
@@ -18,6 +19,7 @@ import ProfileSettingsDialog from "./profile-settings-dialog";
 interface ProfilePopoverProps {
   children: ReactNode;
   profile: Tables<"profiles">;
+  contentClassName?: string;
   side?: "bottom" | "left" | "right" | "top";
   triggerAsChild?: boolean;
 }
@@ -25,10 +27,11 @@ interface ProfilePopoverProps {
 const ProfilePopover = ({
   children,
   profile: initialProfile,
+  contentClassName,
   side = "bottom",
   triggerAsChild = true,
 }: ProfilePopoverProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -39,7 +42,7 @@ const ProfilePopover = ({
         {children}
       </PopoverTrigger>
 
-      <PopoverContent side={side} className="!p-0">
+      <PopoverContent side={side} className={cn("!p-0", contentClassName)}>
         <PopoverGroup className="gap-1">
           <PopoverButton className="gap-3">
             <BrainCircuit />

@@ -125,7 +125,7 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Dashboard>{children}</Dashboard>;
+      <Dashboard>{children}</Dashboard>
     </QueryClientProvider>
   );
 };

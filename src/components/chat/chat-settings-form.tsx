@@ -38,7 +38,7 @@ const ChatSettingsForm = ({
           strokeWidth={1.5}
           className="mt-0.5 !size-[18px] shrink-0"
         />
-        <p className=" text-xs-sm/xs-sm">
+        <p className="mt-[2px] text-xs-sm/xs-sm">
           Chat settings can only be managed <strong>before</strong> the chat
           begins.
         </p>

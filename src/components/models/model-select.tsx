@@ -76,7 +76,7 @@ const ModelSelect = ({ onSelectModel, selectedModelId }: ModelSelectProps) => {
         disabled={allModels.length === 0}
       >
         {allModels.length === 0 ? (
-          <div className="rounded text-sm font-bold">
+          <div className="rounded text-xs-sm/xs-sm font-bold">
             No available models, please check whether your API is still valid.
           </div>
         ) : (
@@ -89,7 +89,7 @@ const ModelSelect = ({ onSelectModel, selectedModelId }: ModelSelectProps) => {
               {selectedModel ? (
                 <>
                   <Sparkles className="size-5 shrink-0" />
-                  <div className="ml-2 flex items-center ">
+                  <div className="ml-2 flex items-center">
                     {selectedModel?.modelName}
                   </div>
                 </>
@@ -110,7 +110,7 @@ const ModelSelect = ({ onSelectModel, selectedModelId }: ModelSelectProps) => {
       >
         <Input
           ref={inputRef}
-          className="w-full"
+          className="w-full text-xs-sm/xs-sm"
           placeholder="Search models..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}

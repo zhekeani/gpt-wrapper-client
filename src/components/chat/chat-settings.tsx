@@ -50,14 +50,14 @@ const ChatSettings = () => {
         <Button className="flex items-center space-x-2" variant="ghost">
           <SlidersHorizontal strokeWidth={2} className="!size-5" />
 
-          <div className="max-w-[120px] truncate text-base sm:max-w-[300px] lg:max-w-[500px]">
+          <div className="max-w-[260px] truncate text-base sm:max-w-[500px] lg:max-w-[700px]">
             {selectedModel?.modelName || chatSettings?.model}
           </div>
         </Button>
       </PopoverTrigger>
 
       <PopoverContent
-        className="bg-background !border-input relative flex max-h-[calc(100vh-60px)] w-[300px] flex-col space-y-4 overflow-auto rounded-lg !border-[1px] p-6 sm:w-[350px] md:w-[400px] lg:w-[500px] "
+        className="bg-background !border-input relative flex max-h-[calc(100vh-60px)] w-[350px] flex-col space-y-4 overflow-auto rounded-lg !border-[1px] p-6 sm:w-[350px] md:w-[400px] lg:w-[500px] "
         align="end"
       >
         <ChatSettingsForm

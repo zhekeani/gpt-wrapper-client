@@ -82,7 +82,7 @@ const ProfileSettingsDialog = ({
   profile: initialProfile,
   triggerAsChild = true,
 }: ProfileSettingsDialogProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
