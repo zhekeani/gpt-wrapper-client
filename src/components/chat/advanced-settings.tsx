@@ -25,7 +25,7 @@ export const AdvancedSettings: FC<AdvancedSettingsProps> = ({ children }) => {
     <Collapsible className="pt-2" open={isOpen} onOpenChange={handleOpenChange}>
       <CollapsibleTrigger className="hover:opacity-50">
         <div className="flex items-center font-bold">
-          <div className="mr-1">Advanced Settings</div>
+          <div className="mr-1 text-sm">Advanced Settings</div>
           {isOpen ? (
             <ChevronDown className="size-5" strokeWidth={2} />
           ) : (

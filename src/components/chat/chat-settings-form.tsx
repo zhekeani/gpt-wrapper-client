@@ -33,14 +33,14 @@ const ChatSettingsForm = ({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-start space-x-2 rounded-lg border border-yellow-500 bg-yellow-100 p-3 text-yellow-900">
+      <div className="flex items-start space-x-2 rounded-lg border border-yellow-500 bg-yellow-100 p-[10px] text-yellow-900">
         <AlertCircle
           strokeWidth={1.5}
           className="mt-0.5 !size-[18px] shrink-0"
         />
-        <p className="text-sm">
+        <p className=" text-xs-sm/xs-sm">
           Chat settings can only be managed <strong>before</strong> the chat
-          begins. Once a conversation starts, changes won’t take effect.
+          begins.
         </p>
       </div>
 

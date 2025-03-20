@@ -82,23 +82,23 @@ const ModelSelect = ({ onSelectModel, selectedModelId }: ModelSelectProps) => {
         ) : (
           <Button
             ref={triggerRef}
-            className="flex items-center justify-between"
+            className="flex w-full items-center justify-between px-3"
             variant="ghost"
           >
-            <div className="flex items-center">
+            <div className="flex items-center truncate">
               {selectedModel ? (
                 <>
-                  <Sparkles className="size-5" />
-                  <div className="ml-2 flex items-center">
+                  <Sparkles className="size-5 shrink-0" />
+                  <div className="ml-2 flex items-center ">
                     {selectedModel?.modelName}
                   </div>
                 </>
               ) : (
-                <div className="flex items-center">Select a model</div>
+                <div className="flex items-center truncate">Select a model</div>
               )}
             </div>
 
-            <ChevronDown />
+            <ChevronDown className="shrink-0" />
           </Button>
         )}
       </DropdownMenuTrigger>

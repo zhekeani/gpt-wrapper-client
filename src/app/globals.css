@@ -42,6 +42,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --text-xs-sm: 0.8125rem;
+  --leading-xs-sm: 1.3;
 }
 
 :root {
