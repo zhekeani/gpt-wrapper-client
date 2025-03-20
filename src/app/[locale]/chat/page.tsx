@@ -3,6 +3,7 @@
 import ChatContainer from "@/components/chat/chat-container";
 import ChatInput from "@/components/chat/chat-input";
 import ChatSettings from "@/components/chat/chat-settings";
+import HeaderProfileButton from "@/components/profile/header-profile-button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { usePassiveChatStore } from "@/store/passive-chat-store";
@@ -17,13 +18,16 @@ const ChatPage = () => {
       {chatMessages.length === 0 ? (
         <div className="size-full flex flex-col relative items-center ">
           <header className="flex sticky top-0 bg-background h-14 w-full shrink-0 items-center justify-between px-4 border-b-[1px] border-b-accent">
-            <div>
+            <div className="flex items-center">
               <SidebarTrigger
                 className={cn("block", showSidebar && "md:hidden")}
               />
+              <ChatSettings />
             </div>
 
-            <ChatSettings />
+            <div className="flex items-center gap-2">
+              <HeaderProfileButton />
+            </div>
           </header>
 
           <div className="flex grow size-full items-center justify-center border-b-[1px] border-b-accent" />

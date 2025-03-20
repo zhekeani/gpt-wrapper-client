@@ -12,11 +12,14 @@ import { useModelsStore } from "@/store/models-store";
 import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { useProfileStore } from "@/store/user-profile-store";
 import { LLMID } from "@/types/llms";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import Loading from "../loading";
 
 const ChatLayout = ({ children }: { children: ReactNode }) => {
+  const [queryClient] = useState(() => new QueryClient());
+
   const [loading, setLoading] = useState(true);
   const isInitialLoad = useRef<boolean>(true);
   const router = useRouter();
@@ -41,7 +44,6 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
   const setPresets = useItemsStore((state) => state.setPresets);
 
   const fetchProfileAndModels = useCallback(async () => {
-    setLoading(true);
     const supabase = getSupabaseBrowserClient();
     const user = (await supabase.auth.getUser()).data.user;
 
@@ -59,12 +61,9 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
         setAvailableOpenRouterModels(openRouterModels);
       }
     }
-
-    setLoading(false);
   }, [router, setAvailableOpenRouterModels, setProfile]);
 
   const fetchChatsData = useCallback(async () => {
-    setLoading(true);
     const supabase = getSupabaseBrowserClient();
     const user = (await supabase.auth.getUser()).data.user;
 
@@ -80,7 +79,6 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
 
     setChats(chats);
     setPresets(presets);
-    setLoading(false);
   }, [router, setChats, setPresets]);
 
   const resetChatState = useCallback(() => {
@@ -110,10 +108,14 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isInitialLoad.current) {
-      fetchProfileAndModels();
+      setLoading(true);
+
       resetChatState();
+      fetchProfileAndModels();
       fetchChatsData();
+
       isInitialLoad.current = false;
+      setLoading(false);
     }
   }, [fetchChatsData, fetchProfileAndModels, resetChatState]);
 
@@ -121,7 +123,11 @@ const ChatLayout = ({ children }: { children: ReactNode }) => {
     return <Loading />;
   }
 
-  return <Dashboard>{children}</Dashboard>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Dashboard>{children}</Dashboard>;
+    </QueryClientProvider>
+  );
 };
 
 export default ChatLayout;

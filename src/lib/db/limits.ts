@@ -4,6 +4,12 @@ export const PROFILE_DISPLAY_NAME_MAX = 100;
 export const PROFILE_CONTEXT_MAX = 1500;
 export const PROFILE_USERNAME_MIN = 3;
 export const PROFILE_USERNAME_MAX = 25;
+export const PROFILE_MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+export const PROFILE_ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
 
 // Presets
 export const PRESET_NAME_MAX = 100;

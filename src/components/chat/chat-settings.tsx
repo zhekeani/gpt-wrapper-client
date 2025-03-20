@@ -48,11 +48,11 @@ const ChatSettings = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button className="flex items-center space-x-2" variant="ghost">
+          <SlidersHorizontal strokeWidth={2} className="!size-5" />
+
           <div className="max-w-[120px] truncate text-base sm:max-w-[300px] lg:max-w-[500px]">
             {selectedModel?.modelName || chatSettings?.model}
           </div>
-
-          <SlidersHorizontal strokeWidth={2} className="!size-5" />
         </Button>
       </PopoverTrigger>
 

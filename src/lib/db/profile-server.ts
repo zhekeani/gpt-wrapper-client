@@ -1,9 +1,14 @@
 "use server";
 
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseCookiesUtilClient } from "@/lib/supabase/server";
+import { ActionResponse } from "@/types/action";
 import { TablesInsert, TablesUpdate } from "@/types/supabase.types";
+import { delay } from "../delay";
 
-export const getProfileByUserIdOnServer = async (userId: string) => {
+export const getProfileByUserIdOnServer = async (
+  userId: string
+): Promise<ActionResponse<TablesInsert<"profiles">>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -11,30 +16,32 @@ export const getProfileByUserIdOnServer = async (userId: string) => {
     .eq("user_id", userId)
     .single();
 
-  if (!profile) {
-    throw new Error(error.message);
+  if (error || !profile) {
+    return { success: false, error: error?.message ?? "Profile not found" };
   }
 
-  return profile;
+  return { success: true, data: profile };
 };
 
-export const getProfilesByUserIdOnServer = async (userId: string) => {
+export const getProfilesByUserIdOnServer = async (
+  userId: string
+): Promise<ActionResponse<TablesInsert<"profiles">[]>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: profiles, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("user_id", userId);
 
-  if (!profiles) {
-    throw new Error(error.message);
+  if (error || !profiles) {
+    return { success: false, error: error?.message ?? "Profiles not found" };
   }
 
-  return profiles;
+  return { success: true, data: profiles };
 };
 
 export const createProfileOnServer = async (
   profile: TablesInsert<"profiles">
-) => {
+): Promise<ActionResponse<TablesInsert<"profiles">>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: createdProfile, error } = await supabase
     .from("profiles")
@@ -42,17 +49,20 @@ export const createProfileOnServer = async (
     .select("*")
     .single();
 
-  if (error) {
-    throw new Error(error.message);
+  if (error || !createdProfile) {
+    return {
+      success: false,
+      error: error?.message ?? "Failed to create profile",
+    };
   }
 
-  return createdProfile;
+  return { success: true, data: createdProfile };
 };
 
 export const updateProfileOnServer = async (
   profileId: string,
   profile: TablesUpdate<"profiles">
-) => {
+): Promise<ActionResponse<TablesUpdate<"profiles">>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: updatedProfile, error } = await supabase
     .from("profiles")
@@ -61,14 +71,100 @@ export const updateProfileOnServer = async (
     .select("*")
     .single();
 
-  if (error) {
-    throw new Error(error.message);
+  if (error || !updatedProfile) {
+    return {
+      success: false,
+      error: error?.message ?? "Failed to update profile",
+    };
   }
 
-  return updatedProfile;
+  return { success: true, data: updatedProfile };
 };
 
-export const deleteProfileOnServer = async (profileId: string) => {
+export const updateProfileAndAvatarOnServer = async (
+  profileId: string,
+  userId: string,
+  profile: TablesUpdate<"profiles">,
+  imageFile?: File
+): Promise<ActionResponse<TablesUpdate<"profiles">>> => {
+  await delay(3000);
+
+  const supabase = await getSupabaseCookiesUtilClient();
+  const supabaseAdmin = getSupabaseAdminClient();
+
+  const { username } = profile;
+  const bucketName = "profile_images";
+
+  if (username) {
+    const { data: usernames, error } = await supabaseAdmin
+      .from("profiles")
+      .select("username")
+      .eq("username", username);
+
+    if (error || !usernames) {
+      return {
+        success: false,
+        error: "Failed to check username availability.",
+      };
+    }
+    if (usernames.length > 0) {
+      return {
+        success: false,
+        error: "Username is used.",
+      };
+    }
+  }
+
+  let avatarUrl: string | null = null;
+  let uploadedFilePath: string | null = null;
+
+  if (imageFile) {
+    const filePath = `${userId}/${imageFile.name}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(filePath, imageFile, { upsert: true });
+
+    if (uploadError || !uploadData.fullPath) {
+      console.error(uploadError);
+      return { success: false, error: "Failed to upload profile picture." };
+    }
+
+    uploadedFilePath = filePath;
+    avatarUrl = supabase.storage.from(bucketName).getPublicUrl(filePath)
+      .data.publicUrl;
+  }
+
+  const { data: updatedProfile, error } = await supabase
+    .from("profiles")
+    .update({
+      ...profile,
+      ...(avatarUrl && uploadedFilePath
+        ? { image_url: avatarUrl, image_path: uploadedFilePath }
+        : {}),
+      ...(!!!profile.image_url ? { image_url: "", image_path: "" } : {}),
+    })
+    .eq("id", profileId)
+    .select("*")
+    .single();
+
+  if (error || !updatedProfile) {
+    if (uploadedFilePath) {
+      await supabase.storage.from(bucketName).remove([uploadedFilePath]);
+    }
+
+    return {
+      success: false,
+      error: error?.message ?? "Failed to update profile",
+    };
+  }
+
+  return { success: true, data: updatedProfile };
+};
+
+export const deleteProfileOnServer = async (
+  profileId: string
+): Promise<ActionResponse<null>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { error } = await supabase
     .from("profiles")
@@ -76,8 +172,11 @@ export const deleteProfileOnServer = async (profileId: string) => {
     .eq("id", profileId);
 
   if (error) {
-    throw new Error(error.message);
+    return {
+      success: false,
+      error: error.message ?? "Failed to delete profile",
+    };
   }
 
-  return true;
+  return { success: true, data: null };
 };
