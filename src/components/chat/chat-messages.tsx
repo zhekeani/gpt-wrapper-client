@@ -10,6 +10,8 @@ export const ChatMessages = () => {
 
   const { handleSendEdit } = useChatHandler();
 
+  console.log(chatMessages);
+
   return chatMessages
     .sort((a, b) => a.message.sequence_number - b.message.sequence_number)
     .map((chatMessage, index, array) => {

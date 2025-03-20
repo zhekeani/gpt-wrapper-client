@@ -115,7 +115,7 @@ const Message = ({
       onMouseLeave={() => setIsHovering(false)}
       onKeyDown={handleKeyDown}
     >
-      <div className="relative flex w-full flex-col p-6 sm:max-w-[550px] sm:px-0 md:max-w-[650px] lg:max-w-[650px] xl:max-w-[700px]">
+      <div className="relative flex w-full flex-col py-6 mx-6 sm:max-w-[550px]  md:max-w-[650px] lg:max-w-[650px] xl:max-w-[700px]">
         <div className="absolute right-5 top-7 sm:right-0">
           <MessageActions
             onCopy={handleCopy}

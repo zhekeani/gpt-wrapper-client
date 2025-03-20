@@ -32,7 +32,7 @@ const ChatPage = () => {
 
           <div className="flex grow size-full items-center justify-center border-b-[1px] border-b-accent" />
 
-          <div className="relative w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
+          <div className="relative w-full  items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
             <ChatInput />
           </div>
         </div>

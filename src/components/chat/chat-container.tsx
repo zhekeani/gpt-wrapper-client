@@ -47,6 +47,7 @@ const ChatContainer = () => {
   const fetchMessages = useCallback(
     async (chatId: string) => {
       const fetchedMessages = await getMessagesByChatIdOnClient(chatId);
+      console.log(fetchedMessages);
       setChatMessages(fetchedMessages.map((message) => ({ message })));
     },
     [setChatMessages]
@@ -140,9 +141,9 @@ const ChatContainer = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="relative w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
+      <div className="relative w-full items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
         <ChatInput />
-        {!isGenerating && (
+        {!isGenerating && !showSidebar && (
           <div className="hidden absolute bottom-40 -right-16 md:flex justify-center">
             <ChatScrollBtn
               isAtTop={isAtTop}
