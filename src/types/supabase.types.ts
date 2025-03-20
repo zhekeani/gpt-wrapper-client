@@ -188,6 +188,7 @@ export type Database = {
           bio: string
           created_at: string
           display_name: string
+          email: string
           has_onboarded: boolean
           id: string
           image_path: string
@@ -202,6 +203,7 @@ export type Database = {
           bio: string
           created_at?: string
           display_name: string
+          email: string
           has_onboarded?: boolean
           id?: string
           image_path: string
@@ -216,6 +218,7 @@ export type Database = {
           bio?: string
           created_at?: string
           display_name?: string
+          email?: string
           has_onboarded?: boolean
           id?: string
           image_path?: string

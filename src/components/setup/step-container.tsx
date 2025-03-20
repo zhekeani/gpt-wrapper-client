@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LoaderCircle } from "lucide-react";
 import { FC, useRef } from "react";
 
 export const SETUP_STEP_COUNT = 3;
@@ -17,6 +18,7 @@ interface StepContainerProps {
   stepTitle: string;
   onShouldProceed: (shouldProceed: boolean) => void;
   children?: React.ReactNode;
+  isSaving: boolean;
   enableBackButton?: boolean;
   enableNextButton?: boolean;
 }
@@ -27,6 +29,7 @@ export const StepContainer: FC<StepContainerProps> = ({
   stepTitle,
   onShouldProceed,
   children,
+  isSaving,
   enableBackButton = false,
   enableNextButton = true,
 }) => {
@@ -78,7 +81,11 @@ export const StepContainer: FC<StepContainerProps> = ({
             size="sm"
             onClick={() => onShouldProceed(true)}
           >
-            Next
+            {isSaving ? (
+              <LoaderCircle className="!aspect-square animate-spin" />
+            ) : (
+              "Next"
+            )}
           </Button>
         </div>
       </CardFooter>

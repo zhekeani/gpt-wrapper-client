@@ -36,7 +36,7 @@ const AuthGroupLayout = async ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className="flex w-full flex-1 items-center justify-center px-8 sm:max-w-md">
+    <div className="flex w-full flex-1 items-center justify-center px-8 sm:max-w-lg md:max-w-xl">
       <QueryProvider>{children}</QueryProvider>
     </div>
   );

@@ -1,6 +1,7 @@
 import { buildUrl } from "@/lib/resend/build-url";
 import { getSupabaseCookiesUtilClient } from "@/lib/supabase/server";
 import { EmailOtpType } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -8,15 +9,19 @@ export async function GET(request: NextRequest) {
   const hashed_token = searchParams.get("hashed_token");
   const type = searchParams.get("type") as EmailOtpType;
 
+  const cookieStore = await cookies();
+
   if (!hashed_token || !type) {
     return NextResponse.redirect(
-      buildUrl("/error?type=invalid_request", request)
+      buildUrl("/global-error?type=invalid_request", request)
     );
   }
 
   const supabase = await getSupabaseCookiesUtilClient();
   if (!supabase) {
-    return NextResponse.redirect(buildUrl("/error?type=server_error", request));
+    return NextResponse.redirect(
+      buildUrl("/global-error?type=server_error", request)
+    );
   }
 
   const { error } = await supabase.auth.verifyOtp({
@@ -26,9 +31,32 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      buildUrl("/error?type=invalid_magiclink", request)
+      buildUrl("/global-error?type=invalid_magiclink", request)
     );
   }
 
-  return NextResponse.redirect(buildUrl("/setup", request));
+  const redirectMap: Record<EmailOtpType, string> = {
+    signup: "/setup",
+    recovery: "/reset-password",
+    email: "#",
+    invite: "#",
+    magiclink: "#",
+    email_change: "#",
+  };
+
+  if (type === "recovery") {
+    cookieStore.set({
+      name: "reset_password_token",
+      value: "valid",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/reset-password",
+      maxAge: 900,
+      sameSite: "strict",
+    });
+  }
+
+  const redirectPath = redirectMap[type];
+
+  return NextResponse.redirect(buildUrl(redirectPath, request));
 }

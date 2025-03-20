@@ -10,7 +10,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
-  console.log(formData);
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
