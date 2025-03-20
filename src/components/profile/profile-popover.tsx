@@ -13,7 +13,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Tables } from "@/types/supabase.types";
 import { BrainCircuit, LogOut, UserCog } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
+import { getSupabaseBrowserClient } from "../../lib/supabase/browser-client";
 import ProfileSettingsDialog from "./profile-settings-dialog";
 
 interface ProfilePopoverProps {
@@ -32,6 +34,20 @@ const ProfilePopover = ({
   triggerAsChild = true,
 }: ProfilePopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    const signOut = async () => {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut();
+
+      setIsOpen(false);
+      router.push("/login");
+      router.refresh();
+      return;
+    };
+    signOut();
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -57,7 +73,7 @@ const ProfilePopover = ({
         </PopoverGroup>
         <PopoverDivider />
         <PopoverGroup>
-          <PopoverButton className="gap-3">
+          <PopoverButton onClick={handleSignOut} className="gap-3">
             <LogOut />
             Log out
           </PopoverButton>
