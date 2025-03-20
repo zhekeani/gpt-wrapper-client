@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+}
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

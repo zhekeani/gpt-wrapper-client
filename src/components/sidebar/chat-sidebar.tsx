@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Search } from "lucide-react";
 import { ComponentProps } from "react";
+import ChatSearchDialog from "./dialogs/chat-search-dialog";
 import SidebarChatList from "./sidebar-chat-list";
 import SidebarProfileButton from "./sidebar-profile-button";
 
@@ -21,9 +22,11 @@ const ChatSideBar = ({ ...props }: ChatSideBarProps) => {
         <SidebarTrigger />
 
         <div className="flex items-center gap-2">
-          <Button className="size-8" variant={"ghost"} size={"icon"}>
-            <Search strokeWidth={2} className="!size-5" />
-          </Button>
+          <ChatSearchDialog>
+            <Button className="size-8" variant={"ghost"} size={"icon"}>
+              <Search strokeWidth={2} className="!size-5" />
+            </Button>
+          </ChatSearchDialog>
 
           <ChatNewChatBtn />
         </div>
