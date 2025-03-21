@@ -24,20 +24,22 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { error } = await supabase.auth.verifyOtp({
+  const { data, error } = await supabase.auth.verifyOtp({
     type,
     token_hash: hashed_token,
   });
 
-  if (error) {
+  if (error || !data || (type === "recovery" && !data.user)) {
     return NextResponse.redirect(
       buildUrl("/global-error?type=invalid_magiclink", request)
     );
   }
 
+  const safeEmailString = encodeURIComponent(data.user!.email!);
+
   const redirectMap: Record<EmailOtpType, string> = {
     signup: "/setup",
-    recovery: "/reset-password",
+    recovery: `/reset-password?email=${safeEmailString}`,
     email: "#",
     invite: "#",
     magiclink: "#",
@@ -45,13 +47,15 @@ export async function GET(request: NextRequest) {
   };
 
   if (type === "recovery") {
+    await supabase.auth.signOut();
+
     cookieStore.set({
       name: "reset_password_token",
       value: "valid",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/reset-password",
-      maxAge: 900,
+      maxAge: 1800,
       sameSite: "strict",
     });
   }

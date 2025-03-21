@@ -108,7 +108,7 @@ const ChatContainer = () => {
       <header className="flex sticky top-0 bg-background h-14 w-full shrink-0 items-center  px-4 border-b-[1px] border-b-accent">
         <div className="flex items-center gap-1">
           <SidebarTrigger className={cn("block", showSidebar && "md:hidden")} />
-          <div className="hidden sm:block">
+          <div className={cn(showSidebar ? "hidden" : "hidden sm:block")}>
             <ChatNewChatBtn />
           </div>
         </div>

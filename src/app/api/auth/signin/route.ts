@@ -18,7 +18,11 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      `/login?error=${error.message}&email=${safeEmailString}`
+      buildUrl(
+        `/login?error=${error.message}&email=${safeEmailString}`,
+        request
+      ),
+      302
     );
   }
 

@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
       display_name: displayName,
       username: uniqueUsername,
       openrouter_api_key: "",
+      email: "",
     })
     .select("*")
     .single();
