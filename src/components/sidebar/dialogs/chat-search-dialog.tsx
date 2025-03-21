@@ -50,7 +50,7 @@ const ChatSearchDialog = ({
         closeClassName="top-5"
         aria-describedby={undefined}
       >
-        <DialogTitle className="mr-11 ml-4 ">
+        <DialogTitle className="mr-11 ml-4 mt-1">
           <Input
             placeholder="Search chats..."
             className="!bg-transparent border-0 focus-visible:ring-0 placeholder:text-sm placeholder:font-normal"
