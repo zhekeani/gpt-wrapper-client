@@ -119,6 +119,8 @@ const SetupContainer = ({ profile: initialProfile }: SetupContainerProps) => {
     openrouter_api_key: openrouterAPIKey,
   } = profile;
 
+  console.log(profile);
+
   const renderStep = (stepNum: number) => {
     switch (stepNum) {
       // Profile Step

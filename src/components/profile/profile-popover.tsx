@@ -39,9 +39,10 @@ const ProfilePopover = ({
   const handleSignOut = () => {
     const signOut = async () => {
       const supabase = getSupabaseBrowserClient();
-      await supabase.auth.signOut();
 
       setIsOpen(false);
+      await supabase.auth.signOut();
+
       router.push("/login");
       router.refresh();
       return;

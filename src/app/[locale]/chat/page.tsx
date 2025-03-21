@@ -8,8 +8,11 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { useSidebarStore } from "@/store/sidebar-store";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const ChatPage = () => {
+  const themes = useTheme();
   const showSidebar = useSidebarStore((state) => state.showSidebar);
   const chatMessages = usePassiveChatStore((state) => state.chatMessages);
 
@@ -30,7 +33,17 @@ const ChatPage = () => {
             </div>
           </header>
 
-          <div className="flex grow size-full items-center justify-center border-b-[1px] border-b-accent" />
+          <div className="flex grow size-full items-center justify-center border-b-[1px] border-b-accent">
+            <Image
+              alt="Logo"
+              src={
+                themes.theme !== "light" ? "/logo_2.svg" : "/logo_2_light.svg"
+              }
+              width={260}
+              height={260}
+              className=""
+            />
+          </div>
 
           <div className="relative w-full  items-end px-2 pb-3 pt-0 sm:max-w-[600px] sm:pb-8 sm:pt-5 md:max-w-[700px] lg:max-w-[700px] xl:max-w-[800px]">
             <ChatInput />

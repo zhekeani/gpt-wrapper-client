@@ -58,6 +58,15 @@ export const useChatHandler = () => {
     router.push(`/chat`);
   };
 
+  const handleResetChat = () => {
+    setUserInput("");
+    setChatMessages([]);
+    setSelectedChat(null);
+
+    setIsGenerating(false);
+    setFirstTokenReceived(false);
+  };
+
   const handleFocusChatInput = () => {
     chatInputRef.current?.focus();
   };
@@ -159,7 +168,7 @@ export const useChatHandler = () => {
       setFirstTokenReceived(false);
 
       if (isNewChat) {
-        router.replace(`/chat/${currentChat.id}`);
+        router.replace(`/chat?chatId=${currentChat.id}`);
       }
     } catch (error) {
       console.error(error);
@@ -193,6 +202,7 @@ export const useChatHandler = () => {
   return {
     chatInputRef,
     handleNewChat,
+    handleResetChat,
     handleFocusChatInput,
     handleStopMessage,
     handleSendMessage,

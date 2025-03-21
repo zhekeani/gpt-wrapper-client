@@ -10,7 +10,7 @@ import { useActiveChatStore } from "@/store/active-chat-store";
 import { usePassiveChatStore } from "@/store/passive-chat-store";
 import { useSidebarStore } from "@/store/sidebar-store";
 import { LLMID } from "@/types/llms";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ChatInfo from "./chat-info";
 import ChatInput from "./chat-input";
@@ -21,7 +21,11 @@ import ChatScrollBtn from "./chat-scroll-button";
 const ChatContainer = () => {
   const isInitialLoad = useRef<boolean>(true);
   const params = useParams() as { chatId: string | null };
-  const [loading, setLoading] = useState(!!params.chatId);
+  const searchParams = useSearchParams();
+
+  const [loading, setLoading] = useState(
+    !!params.chatId || !!searchParams.get("chatId")
+  );
 
   const setChatMessages = usePassiveChatStore((state) => state.setChatMessages);
   const setSelectedChat = usePassiveChatStore((state) => state.setSelectedChat);
@@ -86,7 +90,7 @@ const ChatContainer = () => {
     };
 
     if (isInitialLoad.current) {
-      const chatId = params.chatId || null;
+      const chatId = params.chatId || searchParams.get("chatId") || null;
       fetchData(chatId);
       isInitialLoad.current = false;
     }
@@ -96,6 +100,7 @@ const ChatContainer = () => {
     handleFocusChatInput,
     params.chatId,
     scrollToBottom,
+    searchParams,
     setIsAtBottom,
   ]);
 
@@ -131,7 +136,7 @@ const ChatContainer = () => {
       </header>
 
       <div
-        className="flex size-full flex-col overflow-auto border-b-[1px] border-b-accent"
+        className="flex size-full flex-col overflow-auto border-b-[1px] border-b-accent bg-background"
         onScroll={handleScroll}
       >
         <div ref={messagesStartRef} />

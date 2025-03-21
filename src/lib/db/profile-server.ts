@@ -3,12 +3,12 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseCookiesUtilClient } from "@/lib/supabase/server";
 import { ActionResponse } from "@/types/action";
-import { TablesInsert, TablesUpdate } from "@/types/supabase.types";
-import { delay } from "../delay";
+import { Tables, TablesUpdate } from "@/types/supabase.types";
+// import { delay } from "../delay";
 
 export const getProfileByUserIdOnServer = async (
   userId: string
-): Promise<ActionResponse<TablesInsert<"profiles">>> => {
+): Promise<ActionResponse<Tables<"profiles">>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -25,7 +25,7 @@ export const getProfileByUserIdOnServer = async (
 
 export const getProfilesByUserIdOnServer = async (
   userId: string
-): Promise<ActionResponse<TablesInsert<"profiles">[]>> => {
+): Promise<ActionResponse<Tables<"profiles">[]>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: profiles, error } = await supabase
     .from("profiles")
@@ -40,8 +40,8 @@ export const getProfilesByUserIdOnServer = async (
 };
 
 export const createProfileOnServer = async (
-  profile: TablesInsert<"profiles">
-): Promise<ActionResponse<TablesInsert<"profiles">>> => {
+  profile: Tables<"profiles">
+): Promise<ActionResponse<Tables<"profiles">>> => {
   const supabase = await getSupabaseCookiesUtilClient();
   const { data: createdProfile, error } = await supabase
     .from("profiles")
@@ -87,7 +87,7 @@ export const updateProfileAndAvatarOnServer = async (
   profile: TablesUpdate<"profiles">,
   imageFile?: File
 ): Promise<ActionResponse<TablesUpdate<"profiles">>> => {
-  await delay(3000);
+  // await delay(3000);
 
   const supabase = await getSupabaseCookiesUtilClient();
   const supabaseAdmin = getSupabaseAdminClient();

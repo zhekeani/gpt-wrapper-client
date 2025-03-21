@@ -12,7 +12,14 @@ const fetchInitialData = async (): Promise<Tables<"profiles">> => {
     redirect("/login");
   }
 
-  const profile = await getProfileByUserIdOnServer(user.id);
+  const response = await getProfileByUserIdOnServer(user.id);
+
+  if (!response.success || !response.data) {
+    console.log(response.error);
+    redirect("/login");
+  }
+
+  const profile = response.data;
 
   if (profile.has_onboarded) {
     redirect("/chat");

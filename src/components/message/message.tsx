@@ -143,7 +143,7 @@ const Message = ({
                 />
               ) : profile?.image_url ? (
                 <Image
-                  className={`size-[32px] rounded`}
+                  className={`size-[32px] rounded object-cover`}
                   src={profile?.image_url}
                   height={28}
                   width={28}
